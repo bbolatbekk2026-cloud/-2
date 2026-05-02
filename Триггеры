@@ -1,0 +1,72 @@
+-- LOG TABLE
+CREATE TABLE IF NOT EXISTS payments_log (
+    log_id SERIAL PRIMARY KEY,
+    payment_id INT,
+    action_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 1. LOG trigger
+CREATE OR REPLACE FUNCTION log_payment()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO payments_log(payment_id)
+    VALUES (NEW.payment_id);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_payment_log
+AFTER INSERT ON payments
+FOR EACH ROW
+EXECUTE FUNCTION log_payment();
+
+
+-- 2. CHECK trigger
+CREATE OR REPLACE FUNCTION check_payment()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.amount <= 0 THEN
+        RAISE EXCEPTION 'Amount must be > 0';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_check_payment
+BEFORE INSERT ON payments
+FOR EACH ROW
+EXECUTE FUNCTION check_payment();
+
+
+-- 3. UPDATE trigger
+CREATE OR REPLACE FUNCTION update_time()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.payment_date = CURRENT_DATE;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_update_payment
+BEFORE UPDATE ON payments
+FOR EACH ROW
+EXECUTE FUNCTION update_time();
+
+
+-- 4. INSTEAD OF trigger
+CREATE VIEW client_view AS
+SELECT full_name, phone FROM clients;
+
+CREATE OR REPLACE FUNCTION insert_client_view()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO clients(full_name, phone)
+    VALUES (NEW.full_name, NEW.phone);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_insert_view
+INSTEAD OF INSERT ON client_view
+FOR EACH ROW
+EXECUTE FUNCTION insert_client_view();
