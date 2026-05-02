@@ -1,0 +1,54 @@
+INSERT INTO roles (role_name) VALUES
+('Admin'),
+('Manager'),
+('Cashier'),
+('Analyst'),
+('Support');
+
+INSERT INTO employees (full_name, position, email, phone) VALUES
+('Мадина Ахметова', 'Manager', 'm1@mail.kz', '8700000001'),
+('Ержан Сеитов', 'Cashier', 'm2@mail.kz', '8700000002'),
+('Айбек Нурланов', 'Analyst', 'm3@mail.kz', '8700000003'),
+('Дана Серик', 'Support', 'm4@mail.kz', '8700000004'),
+('Нурбек Асан', 'Admin', 'm5@mail.kz', '8700000005');
+
+INSERT INTO employee_roles (employee_id, role_id) VALUES
+(1,2),
+(2,3),
+(3,4),
+(4,5),
+(5,1);
+
+INSERT INTO clients (full_name, phone, email, passport_number, monthly_income, credit_score) VALUES
+('Аружан Тулеубаева', '8701110001', 'c1@mail.kz', 'P001', 350000, 720),
+('Нурсултан Нурбек', '8701110002', 'c2@mail.kz', 'P002', 500000, 680),
+('Айдана Сериккызы', '8701110003', 'c3@mail.kz', 'P003', 420000, 750),
+('Диана Бекзат', '8701110004', 'c4@mail.kz', 'P004', 300000, 640),
+('Жанель Кайрат', '8701110005', 'c5@mail.kz', 'P005', 600000, 810);
+
+INSERT INTO loan_applications (client_id, requested_amount, interest_rate, term_months, status) VALUES
+(1, 2000000, 18.5, 12, 'Approved'),
+(2, 1500000, 17.0, 10, 'Pending'),
+(3, 3000000, 19.0, 24, 'Approved'),
+(4, 1000000, 16.5, 8, 'Rejected'),
+(5, 2500000, 18.0, 18, 'Approved');
+
+INSERT INTO loans (application_id, approved_amount, start_date, end_date, monthly_payment, status) VALUES
+(1, 2000000, '2026-03-01', '2027-03-01', 185000, 'Active'),
+(3, 3000000, '2026-03-10', '2028-03-10', 165000, 'Active'),
+(5, 2500000, '2026-04-01', '2027-10-01', 175000, 'Active'),
+(2, 1500000, '2026-05-01', '2027-03-01', 145000, 'Closed');
+
+INSERT INTO payments (loan_id, payment_date, amount, payment_method, status) VALUES
+(1, '2026-04-01', 185000, 'Kaspi QR', 'Completed'),
+(2, '2026-04-10', 165000, 'Card', 'Completed'),
+(3, '2026-05-01', 180000, 'Cash', 'Completed'),
+(4, '2026-05-15', 175000, 'Bank Transfer', 'Completed'),
+(3, '2026-06-01', 145000, 'Card', 'Completed');
+
+INSERT INTO transactions (payment_id, transaction_status, description) VALUES
+(1, 'Success', 'Kaspi төлемі'),
+(2, 'Success', 'Карта төлемі'),
+(3, 'Success', 'Қолма-қол төлем'),
+(4, 'Success', 'Банк аударымы'),
+(5, 'Success', 'Қайтадан төлем');
