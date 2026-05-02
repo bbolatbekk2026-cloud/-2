@@ -1,0 +1,16 @@
+BEGIN;
+
+INSERT INTO payments (loan_id, amount)
+VALUES (1, 50000);
+
+SAVEPOINT sp1;
+
+-- Қате операция
+INSERT INTO payments (loan_id, amount)
+VALUES (1, -100);
+
+ROLLBACK TO sp1;
+
+COMMIT;
+
+SELECT * FROM payments ORDER BY payment_id DESC;
