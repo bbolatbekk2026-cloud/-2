@@ -1,0 +1,59 @@
+-- 1. Клиент қосу
+CREATE OR REPLACE PROCEDURE add_client(
+    p_name VARCHAR,
+    p_phone VARCHAR
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO clients(full_name, phone)
+    VALUES (p_name, p_phone);
+END;
+$$;
+
+
+-- 2. Несие өтінім беру
+CREATE OR REPLACE PROCEDURE give_loan(
+    p_client_id INT,
+    p_amount NUMERIC
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO loan_applications(client_id, requested_amount)
+    VALUES (p_client_id, p_amount);
+END;
+$$;
+
+
+-- 3. Төлем қосу
+CREATE OR REPLACE PROCEDURE add_payment(
+    p_loan_id INT,
+    p_amount NUMERIC
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO payments(loan_id, amount)
+    VALUES (p_loan_id, p_amount);
+END;
+$$;
+
+
+-- 4. Клиентті өшіру
+CREATE OR REPLACE PROCEDURE delete_client(
+    p_id INT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    DELETE FROM clients WHERE client_id = p_id;
+END;
+$$;
+
+
+
+CALL add_client('Test', '8700000000');
+CALL give_loan(1, 500000);
+CALL add_payment(1, 100000);
+CALL delete_client(10);
