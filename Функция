@@ -1,0 +1,60 @@
+-- 1. Жалпы төлем
+CREATE OR REPLACE FUNCTION get_total_paid(p_loan_id INT)
+RETURNS NUMERIC AS $$
+DECLARE total NUMERIC;
+BEGIN
+    SELECT COALESCE(SUM(amount),0) INTO total
+    FROM payments
+    WHERE loan_id = p_loan_id;
+
+    RETURN total;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- 2. Клиент кредит скор
+CREATE OR REPLACE FUNCTION get_client_score(p_client_id INT)
+RETURNS INT AS $$
+DECLARE score INT;
+BEGIN
+    SELECT credit_score INTO score
+    FROM clients
+    WHERE client_id = p_client_id;
+
+    RETURN score;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- 3. Қанша төлем бар
+CREATE OR REPLACE FUNCTION count_payments(p_loan_id INT)
+RETURNS INT AS $$
+DECLARE cnt INT;
+BEGIN
+    SELECT COUNT(*) INTO cnt
+    FROM payments
+    WHERE loan_id = p_loan_id;
+
+    RETURN cnt;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- 4. Орташа төлем
+CREATE OR REPLACE FUNCTION avg_payment(p_loan_id INT)
+RETURNS NUMERIC AS $$
+DECLARE avg_val NUMERIC;
+BEGIN
+    SELECT AVG(amount) INTO avg_val
+    FROM payments
+    WHERE loan_id = p_loan_id;
+
+    RETURN avg_val;
+END;
+$$ LANGUAGE plpgsql;
+
+
+SELECT get_total_paid(1);
+SELECT get_client_score(1);
+SELECT count_payments(1);
+SELECT avg_payment(1);
